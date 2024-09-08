@@ -1,7 +1,9 @@
 <template>
   <v-card class="hoverable" elevation="2">
     <v-img :src="card.src" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px" cover>
-      <v-card-title class="text-white" v-text="card.title"></v-card-title>
+      <v-card-title class="text-white">
+        {{ card.title }}
+      </v-card-title>
     </v-img>
 
     <v-card-actions class="justify-end">
@@ -22,10 +24,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from "vue";
+import Movie from "../domain/entity/Movie";
 
 const props = defineProps({
   card: {
-    type: Object as PropType<{ title: string; src: string }>,
+    type: Object as PropType<Movie>,
     required: true,
   },
 });
