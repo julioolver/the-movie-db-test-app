@@ -1,4 +1,7 @@
 export default interface IMovie {
   title: string;
-  src: string;
+  poster_path: string;
+  watched: boolean;
+  favorite: boolean;
+  watch_later: boolean;
 }
