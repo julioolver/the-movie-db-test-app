@@ -7,36 +7,26 @@
     </v-row>
 
     <v-row justify="center" class="mt-4">
-      <v-pagination v-model="currentPage" :length="totalPages" @input="fetchMovies"></v-pagination>
+      <pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="fetchMovies" />
     </v-row>
   </v-container>
 </template>
 
-<script>
+<script lang="ts" setup>
 import CardMovie from '../components/CardMovie.vue';
+import Pagination from '../components/Pagination.vue';
+import { Ref, ref } from 'vue'
+import { movies } from '../consts/mockMovies';
+import Movie from '../domain/entity/Movie';
 
-export default {
-  data: () => ({
-    cards: [
-      { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg' },
-      { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
-      { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg' },
-      { title: 'Mountain hiking', src: 'https://cdn.vuetifyjs.com/images/cards/mountain.jpg' },
-      { title: 'City skyline', src: 'https://cdn.vuetifyjs.com/images/cards/city.jpg' },
-      { title: 'Tropical beach', src: 'https://cdn.vuetifyjs.com/images/cards/beach.jpg' },
-    ],
-    currentPage: 1,
-    totalPages: 5,
-  }),
+const cards: Ref<Movie[]> = ref(movies)
 
-  components: {
-    CardMovie,
-  },
-  methods: {
-    fetchMovies() {
-      console.log('Fetching page:', this.currentPage);
-    },
-  },
+const currentPage = ref(1)
+const totalPages = ref(5)
+
+function fetchMovies(newPage: number) {
+  currentPage.value = newPage
+  console.log(`Fetching movies for page: ${newPage}`)
 }
 </script>
 
