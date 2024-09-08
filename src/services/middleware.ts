@@ -1,41 +1,37 @@
-import storages from '@/services/storages'
-import http from '@/plugins/axios'
-import { getCurrentInstance } from 'vue'
+import storages from "@/services/storages";
+import http from "@/plugins/axios";
+import { userData } from "@/main"; // Importa o userData reativo
 
 export default {
   async redirectIfNotAuthenticated(to: any, from: any, next: any) {
-    const token = storages.getToken()
+    const token = storages.getToken();
 
     if (!token) {
-      return next({ name: 'pages-login' })
+      return next({ name: "pages-login" });
     }
 
     try {
-      const response = await http.get('me')
+      const response = await http.get("auth/me");
 
-      // obtendo a instância atual do vue para criar uma propriedade global do usuário logado,
-      // para não precisar utilizar vuex ou pinia (gerenciamento de estado) neste momento. É acessado com this.$userData
-      const instance = getCurrentInstance()
+      // obtendo a instância reativa do userData criado no main.ts,
+      // para não precisar utilizar vuex ou pinia (gerenciamento de estado) neste momento. É acessado com $userData
+      userData.name = response.data;
 
-      if (instance) {
-        instance.appContext.config.globalProperties.$userData = response.data
-      }
-
-      next()
+      next();
     } catch (error) {
-      console.error('Erro ao validar token:', error)
-      storages.deleteToken()
-      return next({ name: 'pages-login' })
+      console.error("Erro ao validar token:", error);
+      storages.deleteToken();
+      return next({ name: "pages-login" });
     }
   },
 
   redirectIfAuthenticated(to: any, from: any, next: any) {
-    const token = storages.getToken()
+    const token = storages.getToken();
 
     if (token) {
-      return next({ name: 'index' })
+      return next({ name: "index" });
     }
 
-    next()
-  }
-}
+    next();
+  },
+};
