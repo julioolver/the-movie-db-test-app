@@ -1,5 +1,5 @@
 <template>
-  <v-pagination v-model="currentPage" :length="totalPages" @input="$emit('page-changed', currentPage)"></v-pagination>
+  <v-pagination v-model="currentPage" :length="totalPages" />
 </template>
 
 <script setup lang="ts">
@@ -10,13 +10,17 @@ const props = defineProps<{
   totalPages: number;
 }>()
 
-const currentPage = ref(props.currentPage)
-
 const emit = defineEmits<{
   (e: 'page-changed', newPage: number): void;
 }>()
 
+const currentPage = ref(props.currentPage)
+
 watch(() => props.currentPage, (newPage) => {
+  currentPage.value = newPage
+})
+
+watch(currentPage, (newPage) => {
   emit('page-changed', newPage)
 })
 </script>
