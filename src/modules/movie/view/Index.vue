@@ -15,10 +15,10 @@
 <script lang="ts" setup>
 import CardMovie from '../components/CardMovie.vue';
 import Pagination from '../components/Pagination.vue';
-import { Ref, ref } from 'vue'
 import { movies } from '../consts/mockMovies';
 import Movie from '../domain/entity/Movie';
 import http from '@/plugins/axios';
+import { Ref, ref } from 'vue'
 
 const cards: Ref<Movie[]> = ref(movies)
 
@@ -27,8 +27,6 @@ const totalPages = ref(5)
 
 function fetchMovies(newPage: number) {
   currentPage.value = newPage
-
-  console.log(`Fetching movies for page: ${newPage}`)
 
   http.get('/movies', {
     params: {
