@@ -1,7 +1,8 @@
 import storages from "@/services/storages";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
-const instance = axios.create({
+const api = axios.create({
   baseURL: "http://localhost:8088/api/",
   timeout: 1000,
   headers: {
@@ -11,7 +12,7 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     const token = storages.getToken();
 
@@ -24,4 +25,35 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default instance;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshResponse = await api.post("/auth/refresh");
+        const newAccessToken = refreshResponse.data.accessToken;
+
+        storages.setToken(newAccessToken);
+
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        storages.deleteToken();
+        const router = useRouter();
+        router.push({ name: "login" });
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default api;
