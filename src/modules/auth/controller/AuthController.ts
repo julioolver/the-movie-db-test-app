@@ -7,28 +7,39 @@ import { registredUser } from "../types/input-out/registredUser";
 
 export default function useAuthController() {
   const user = reactive(new User({}));
+  const tabAuth = ref(0);
 
   const isPasswordMatching = computed(
     () => user.password === user.password_confirmation
   );
 
   const login = async () => {
-    console.log(user);
+    try {
+      console.log(user);
 
-    const userLogin = await http.post("/auth/login", user.login());
+      const userLogin = await http.post("/auth/login", user.login());
 
-    if (userLogin) {
-      storages.setToken(userLogin.data.access_token);
+      if (userLogin) {
+        storages.setToken(userLogin.data.access_token);
 
-      return router.push({ name: "Home" });
+        return router.push({ name: "Home" });
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const register = async (): Promise<void> => {
-    const { data }: registredUser = await http.post("/auth/register", user);
+    try {
+      console.log(user);
+      const { data }: registredUser = await http.post("/auth/register", user);
 
-    storages.setToken(data.access_token);
-    router.push({ name: "Home" });
+      storages.setToken(data.access_token);
+
+      tabAuth.value = 0;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {
@@ -36,6 +47,7 @@ export default function useAuthController() {
     isPasswordMatching,
     login,
     register,
+    tabAuth,
   };
 }
 
