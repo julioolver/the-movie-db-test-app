@@ -7,16 +7,16 @@
     </v-img>
 
     <v-card-actions class="justify-end">
-      <v-btn icon @click="controller.changeAction(card, 'favorite')">
+      <v-btn icon @click.stop="controller.changeAction(card, 'favorite')">
         <v-icon color="yellow">{{ card.favorite ? 'mdi-heart' :
           'mdi-heart-outline' }}</v-icon>
       </v-btn>
 
-      <v-btn icon @click="controller.changeAction(card, 'watched')">
+      <v-btn icon @click.stop="controller.changeAction(card, 'watched')">
         <v-icon color="blue">{{ card.watched ? 'mdi-eye' : 'mdi-eye-outline' }}</v-icon>
       </v-btn>
 
-      <v-btn icon @click="controller.changeAction(card, 'watch_later')">
+      <v-btn icon @click.stop="controller.changeAction(card, 'watch_later')">
         <v-icon color="green">{{ card.watch_later ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
       </v-btn>
     </v-card-actions>

@@ -5,14 +5,14 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, watch } from 'vue'
 
-const props = defineProps<{
+const props = defineProps < {
   currentPage: number;
   totalPages: number;
-}>()
+} > ()
 
-const emit = defineEmits<{
+const emit = defineEmits < {
   (e: 'page-changed', newPage: number): void;
-}>()
+}> ()
 
 const currentPage = ref(props.currentPage)
 

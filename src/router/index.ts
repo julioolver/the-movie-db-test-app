@@ -21,6 +21,7 @@ const router = createRouter({
       path: "/",
       name: "Home",
       component: MovieIndex,
+      beforeEnter: Guard.redirectIfNotAuthenticated,
     },
     {
       path: "/movies",
@@ -36,16 +37,25 @@ const router = createRouter({
     },
     {
       path: "/login",
-      name: "Login",
       component: BlankPage,
       children: [
         {
+          name: "Login",
           path: "",
           component: AuthIndex,
         },
       ],
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      // Se o usuário clicou em "voltar", use a posição salva
+      return savedPosition;
+    } else {
+      // Caso contrário, sempre role para o topo
+      return { top: 0 };
+    }
+  },
 });
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

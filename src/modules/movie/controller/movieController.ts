@@ -1,9 +1,8 @@
 import http from "@/plugins/axios";
 import Movie from "../domain/entity/Movie";
-import { movies as mockMovies } from "../consts/mockMovies";
 import { ref, reactive, onMounted } from "vue";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default function movieController() {
   const movie = reactive(
@@ -24,15 +23,15 @@ export default function movieController() {
   );
 
   const currentPage = ref(1);
-  const totalPages = ref(5);
+  const totalPages = ref(1);
+  const isOpen = ref(false);
   const search = ref("");
   const movies = reactive<Movie[]>([]);
   const userMovies = reactive<Movie[]>([]);
+  const selectedMovie = ref<Movie | null>(null);
 
   const fetchMovies = async (newPage: number) => {
     currentPage.value = newPage;
-
-    movies.push(...mockMovies)
 
     const responseMovies = await http.get("/movies", {
       params: {
@@ -61,33 +60,42 @@ export default function movieController() {
     movie: Movie,
     attribute: "watched" | "favorite" | "watch_later"
   ) => {
-   try {
-    movie[attribute] = !movie[attribute];
-    movie.external_id = movie.external_id.toString();
+    try {
+      movie[attribute] = !movie[attribute];
+      movie.external_id = movie.external_id.toString();
 
-    if (movie.internal_id) {
-      http.put(`/movies/${movie.internal_id}/status`, movie).then(() => {
-        console.log("Movie updated");
-      });
-    } else {
+      if (movie.internal_id) {
+        await http.put(`/movies/${movie.internal_id}/status`, movie);
+
+        toast.success("Status atualizado com sucesso!");
+
+        return;
+      }
+
       const response = await http.post("/movies", movie);
+
       const foundMovie = movies.find(
         (m) => m.external_id === movie.external_id
       );
 
       if (foundMovie) {
         foundMovie.internal_id = response.data.movie.id;
-        console.log(
-          "Movie created and internal_id updated:",
-          foundMovie.internal_id
-        );
       }
-    }
-    toast.success('Wow so easy!');
 
-   } catch (error) {
-    toast.error(error.message);
-   }
+      toast.success("Filme adicionado com sucesso!");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const openDialog = (movie: any) => {
+    console.log("Filme selecionado:", movie); // Verificar se o filme está correto
+    selectedMovie.value = { ...movie };
+    isOpen.value = true;
+  };
+  const closeDialog = () => {
+    isOpen.value = false;
+    selectedMovie.value = null;
   };
 
   onMounted(async () => {
@@ -103,6 +111,10 @@ export default function movieController() {
     totalPages,
     userMovies,
     search,
+    openDialog,
+    closeDialog,
+    isOpen,
+    selectedMovie,
   };
 }
 
