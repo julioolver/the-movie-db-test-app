@@ -1,6 +1,6 @@
 import storages from "@/services/storages";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import router from "@/router";
 
 const api = axios.create({
   baseURL: "http://localhost:8088/api/",
@@ -47,8 +47,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         storages.deleteToken();
-        const router = useRouter();
-        router.push({ name: "login" });
+
+        router.push({ name: "Login" });
       }
     }
 
