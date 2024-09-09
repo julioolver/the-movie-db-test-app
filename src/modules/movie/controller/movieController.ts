@@ -1,6 +1,6 @@
 import http from "@/plugins/axios";
 import Movie from "../domain/entity/Movie";
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 
 export default function movieController() {
   const movie = reactive(
@@ -23,10 +23,9 @@ export default function movieController() {
   const currentPage = ref(1);
   const totalPages = ref(5);
   const movies = reactive<Movie[]>([]);
+  const userMovies = reactive<Movie[]>([]);
 
   const fetchMovies = async (newPage: number) => {
-    console.log(newPage);
-
     currentPage.value = newPage;
 
     const responseMovies = await http.get("/movies", {
@@ -38,9 +37,18 @@ export default function movieController() {
 
     const { page } = responseMovies.data;
 
+    movies.splice(0, movies.length);
     movies.push(...responseMovies.data.movies);
 
     totalPages.value = page.total;
+  };
+
+  const getMovieByUser = async () => {
+    const response = await http.get(`user/movies/`);
+
+    userMovies.splice(0, userMovies.length);
+
+    userMovies.push(...response.data.movies);
   };
 
   const changeAction = async (
@@ -70,6 +78,10 @@ export default function movieController() {
     }
   };
 
+  onMounted(async () => {
+    await getMovieByUser();
+  });
+
   return {
     movie,
     changeAction,
@@ -77,6 +89,7 @@ export default function movieController() {
     movies,
     currentPage,
     totalPages,
+    userMovies,
   };
 }
 

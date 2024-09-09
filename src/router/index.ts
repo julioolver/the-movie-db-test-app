@@ -6,6 +6,7 @@
 
 // Composables
 import MovieIndex from "@/modules/movie/view/Index.vue";
+import MoviesUser from "@/modules/movie/view/MoviesUser.vue";
 import AuthIndex from "@/modules/auth/view/Index.vue";
 
 import { createRouter, createWebHistory } from "vue-router/auto";
@@ -25,6 +26,12 @@ const router = createRouter({
       path: "/movies",
       name: "Movies",
       component: MovieIndex,
+      beforeEnter: Guard.redirectIfNotAuthenticated,
+    },
+    {
+      path: "/user/movies",
+      name: "UserMovies",
+      component: MoviesUser,
       beforeEnter: Guard.redirectIfNotAuthenticated,
     },
     {

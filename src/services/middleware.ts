@@ -7,7 +7,7 @@ export default {
     const token = storages.getToken();
 
     if (!token) {
-      return next({ name: "pages-login" });
+      return next({ name: "Login" });
     }
 
     try {
@@ -21,7 +21,7 @@ export default {
     } catch (error) {
       console.error("Erro ao validar token:", error);
       storages.deleteToken();
-      return next({ name: "pages-login" });
+      return next({ name: "Login" });
     }
   },
 
