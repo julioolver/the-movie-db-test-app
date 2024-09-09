@@ -10,6 +10,7 @@ export default function useAuthController() {
   const user = reactive(new User({}));
   const tabAuth = ref(0);
   const valid = ref(false);
+  const isLoginValid = ref(false);
 
   const isPasswordMatching = computed(
     () => user.password === user.password_confirmation
@@ -17,8 +18,9 @@ export default function useAuthController() {
 
   const login = async () => {
     try {
-      console.log(user);
-
+      if (!isLoginValid.value) {
+        return;
+      }
       const userLogin = await http.post("/auth/login", user.login());
 
       if (userLogin) {
@@ -27,7 +29,11 @@ export default function useAuthController() {
         return router.push({ name: "Home" });
       }
     } catch (error) {
-      catchErrors(error);
+      if (error.response) {
+        catchErrors(error.response.data);
+      } else {
+        catchErrors(error);
+      }
     }
   };
 
@@ -55,6 +61,7 @@ export default function useAuthController() {
     register,
     tabAuth,
     valid,
+    isLoginValid,
   };
 }
 
