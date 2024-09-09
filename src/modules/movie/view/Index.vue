@@ -1,13 +1,14 @@
 <template>
   <v-container fluid>
     <v-row dense>
-      <v-col v-for="card in cards" :key="card.poster_path" cols="12" sm="6" md="4" lg="3" xl="2">
-        <CardMovie :card="card" />
+      <v-col v-for="movie in controller.movies" :key="movie.poster_path" cols="12" sm="6" md="4" lg="3" xl="2">
+        <CardMovie :card="movie" :controller="controller" />
       </v-col>
     </v-row>
 
     <v-row justify="center" class="mt-4">
-      <pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="fetchMovies" />
+      <pagination :currentPage="controller.currentPage.value" :totalPages="controller.totalPages.value"
+        @page-changed="controller.fetchMovies" />
     </v-row>
   </v-container>
 </template>
@@ -15,32 +16,10 @@
 <script lang="ts" setup>
 import CardMovie from '../components/CardMovie.vue';
 import Pagination from '../components/Pagination.vue';
-import { movies } from '../consts/mockMovies';
-import Movie from '../domain/entity/Movie';
-import http from '@/plugins/axios';
-import { Ref, ref } from 'vue'
+import movieController from '../controller/movieController';
 
-const cards: Ref<Movie[]> = ref(movies)
+const controller = movieController()
 
-const currentPage = ref(1)
-const totalPages = ref(5)
-
-function fetchMovies(newPage: number) {
-  currentPage.value = newPage
-
-  http.get('/movies', {
-    params: {
-      page: newPage,
-      query: 'dead',
-    }
-  }).then(response => {
-
-    const { page, movies } = response.data
-
-    cards.value = movies
-    totalPages.value = page.total
-  })
-}
 </script>
 
 <style scoped>

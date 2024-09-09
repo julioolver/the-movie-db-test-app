@@ -29,7 +29,7 @@ const router = createRouter({
     },
     {
       path: "/login",
-      name: "pages-login",
+      name: "Login",
       component: BlankPage,
       children: [
         {
