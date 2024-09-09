@@ -19,43 +19,55 @@
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary
-      v-if="!isLoginPage">
+    <v-navigation-drawer
+      v-model="drawer"
+      :location="$vuetify.display.mobile ? 'bottom' : undefined"
+      temporary
+      v-if="!isLoginPage"
+    >
       <v-list :items="items"></v-list>
     </v-navigation-drawer>
     <v-main>
-      <router-view />
+      <v-card
+        class="pa-4 ma-4"
+        elevation="2"
+        height="calc(100vh - 130px)"
+        v-if="!isLoginPage"
+        style="scrollbar-width: none; overflow-y: scroll"
+      >
+        <router-view />
+      </v-card>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
-const drawer = ref(false)
+const router = useRouter();
+const drawer = ref(false);
 
 const items = [
   {
-    title: 'Foo',
-    value: 'foo',
+    title: "Foo",
+    value: "foo",
   },
   {
-    title: 'Bar',
-    value: 'bar',
+    title: "Bar",
+    value: "bar",
   },
   {
-    title: 'Fizz',
-    value: 'fizz',
+    title: "Fizz",
+    value: "fizz",
   },
   {
-    title: 'Buzz',
-    value: 'buzz',
+    title: "Buzz",
+    value: "buzz",
   },
-]
+];
 
 const isLoginPage = computed(() => {
   return router.currentRoute.value.path === "/login";
-})
+});
 </script>

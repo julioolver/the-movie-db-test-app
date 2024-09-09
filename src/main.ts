@@ -6,6 +6,8 @@
 
 // Plugins
 import { registerPlugins } from "@/plugins";
+import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify';
+
 
 // Components
 import App from "./App.vue";
@@ -18,6 +20,10 @@ const userData = reactive({
 });
 
 const app = createApp(App);
+
+app.use(Vue3Toastify, {
+  autoClose: 3000,
+} as ToastContainerOptions);
 
 app.config.globalProperties.$userData = userData;
 

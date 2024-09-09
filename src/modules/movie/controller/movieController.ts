@@ -1,6 +1,9 @@
 import http from "@/plugins/axios";
 import Movie from "../domain/entity/Movie";
+import { movies as mockMovies } from "../consts/mockMovies";
 import { ref, reactive, onMounted } from "vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default function movieController() {
   const movie = reactive(
@@ -22,16 +25,19 @@ export default function movieController() {
 
   const currentPage = ref(1);
   const totalPages = ref(5);
+  const search = ref("");
   const movies = reactive<Movie[]>([]);
   const userMovies = reactive<Movie[]>([]);
 
   const fetchMovies = async (newPage: number) => {
     currentPage.value = newPage;
 
+    movies.push(...mockMovies)
+
     const responseMovies = await http.get("/movies", {
       params: {
         page: newPage,
-        query: "dead",
+        query: search.value.trim(),
       },
     });
 
@@ -55,6 +61,7 @@ export default function movieController() {
     movie: Movie,
     attribute: "watched" | "favorite" | "watch_later"
   ) => {
+   try {
     movie[attribute] = !movie[attribute];
     movie.external_id = movie.external_id.toString();
 
@@ -76,6 +83,11 @@ export default function movieController() {
         );
       }
     }
+    toast.success('Wow so easy!');
+
+   } catch (error) {
+    toast.error(error.message);
+   }
   };
 
   onMounted(async () => {
@@ -90,6 +102,7 @@ export default function movieController() {
     currentPage,
     totalPages,
     userMovies,
+    search,
   };
 }
 
