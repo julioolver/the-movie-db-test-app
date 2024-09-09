@@ -2,7 +2,9 @@
   <v-app>
     <v-app-bar v-if="!isLoginPage">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
       <v-app-bar-title>Movie List</v-app-bar-title>
+
       <v-spacer></v-spacer>
 
       <v-btn icon @click="toggleTheme">
@@ -27,16 +29,33 @@
         </v-tooltip>
       </v-btn>
     </v-app-bar>
-
     <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary
       v-if="!isLoginPage">
-      <v-list :items="items"></v-list>
-    </v-navigation-drawer>
+      <v-list>
+        <v-list-item-group>
 
+          <v-list-item @click="goToExternalLink('https://github.com/julioolver')">
+            <v-list-item-icon>
+              <v-icon>mdi-github</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>GitHub</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="goToExternalLink('https://www.linkedin.com/in/julio-cesar-oliveira-957593169')">
+            <v-list-item-icon>
+              <v-icon>mdi-linkedin</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>LinkedIn</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
     <v-main>
-      <!-- Mantemos o v-card com scroll -->
       <v-card class="pa-4 ma-4" elevation="2" height="calc(100vh - 130px)" v-if="!isLoginPage"
-        style="scrollbar-width: none; overflow-y: auto;" ref="scrollContainer">
+        style="scrollbar-width: none; overflow-y: scroll">
         <router-view />
       </v-card>
       <router-view v-else />
@@ -45,65 +64,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
-import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 
 const router = useRouter();
 const drawer = ref(false);
 const theme = useTheme();
 
-// Variável reativa para verificar se o tema escuro está ativo
 const isDarkTheme = computed(() => theme.global.current.value.dark);
 
-// Função para alternar o tema
 const toggleTheme = () => {
   theme.global.name.value = isDarkTheme.value ? 'light' : 'dark';
 };
 
-const scrollContainer = ref<HTMLDivElement | null>(null);
-
-// Função para rolar até o topo do contêiner
-const scrollToTop = () => {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollTop = 0; // Define o scroll para o topo
-  }
-};
-
-// Aciona o scroll para o topo sempre que mudar de rota
-onBeforeRouteUpdate(() => {
-  scrollToTop();
-});
-
-// Itens para o menu
-const items = [
-  {
-    title: "GitHub",
-    value: "https://github.com/rodrigorgtic/movie-list",
-  },
-  {
-    title: "Bar",
-    value: "bar",
-  },
-  {
-    title: "Fizz",
-    value: "fizz",
-  },
-  {
-    title: "Buzz",
-    value: "buzz",
-  },
-];
-
-// Verifica se a página atual é a página de login
 const isLoginPage = computed(() => {
   return router.currentRoute.value.path === "/login";
 });
-</script>
 
-<style scoped>
-/* Ajuste mínimo para esconder a barra de rolagem */
-.v-card {
-  scrollbar-width: none;
-}
-</style>
+const goToExternalLink = (url: string) => {
+  window.open(url, '_blank');
+};
+</script>

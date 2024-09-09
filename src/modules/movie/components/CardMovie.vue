@@ -7,18 +7,30 @@
     </v-img>
 
     <v-card-actions class="justify-end">
-      <v-btn icon @click.stop="controller.changeAction(card, 'favorite')">
-        <v-icon color="yellow">{{ card.favorite ? 'mdi-heart' :
-          'mdi-heart-outline' }}</v-icon>
-      </v-btn>
-
-      <v-btn icon @click.stop="controller.changeAction(card, 'watched')">
-        <v-icon color="blue">{{ card.watched ? 'mdi-eye' : 'mdi-eye-outline' }}</v-icon>
-      </v-btn>
-
-      <v-btn icon @click.stop="controller.changeAction(card, 'watch_later')">
-        <v-icon color="green">{{ card.watch_later ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon @click.stop="controller.changeAction(card, 'favorite')">
+            <v-icon color="red">{{ card.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Favoritar</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon @click.stop="controller.changeAction(card, 'watch_later')">
+            <v-icon color="blue">{{ card.watch_later ? 'mdi-eye' : 'mdi-eye-outline' }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Assistido</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon @click.stop="controller.changeAction(card, 'watch_later')">
+            <v-icon color="green">{{ card.watch_later ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Assistir mais tarde</span>
+      </v-tooltip>
     </v-card-actions>
   </v-card>
 </template>
