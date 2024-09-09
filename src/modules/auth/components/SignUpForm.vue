@@ -11,7 +11,7 @@
       :rules="[v => !!v || 'Senha é obrigatória']" required hide-details="auto"></v-text-field>
 
     <v-text-field v-model="controller.user.password_confirmation" label="Confirmar Senha" type="password"
-      :rules="[v => v === controller.isPasswordMatching.value || 'As senhas não coincidem']" required
+      :rules="[v => controller.isPasswordMatching.value || 'As senhas não coincidem']" required
       hide-details="auto"></v-text-field>
 
     <v-btn color="success" block @click="controller.register()" type="submit">Cadastrar</v-btn>

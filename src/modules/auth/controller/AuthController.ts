@@ -32,6 +32,10 @@ export default function useAuthController() {
   };
 
   const register = async (): Promise<void> => {
+    if (!valid.value) {
+      return;
+    }
+
     try {
       console.log(user);
       const { data }: registredUser = await http.post("/auth/register", user);
