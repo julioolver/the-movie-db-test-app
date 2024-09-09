@@ -4,10 +4,12 @@ import User from "../entities/User";
 import { ref, computed, reactive } from "vue";
 import router from "@/router";
 import { registredUser } from "../types/input-out/registredUser";
+import { toast } from "vue3-toastify";
 
 export default function useAuthController() {
   const user = reactive(new User({}));
   const tabAuth = ref(0);
+  const valid = ref(false);
 
   const isPasswordMatching = computed(
     () => user.password === user.password_confirmation
@@ -25,7 +27,7 @@ export default function useAuthController() {
         return router.push({ name: "Home" });
       }
     } catch (error) {
-      console.error(error);
+      catchErrors(error);
     }
   };
 
@@ -38,8 +40,26 @@ export default function useAuthController() {
 
       tabAuth.value = 0;
     } catch (error) {
-      console.error(error);
+      catchErrors(error);
     }
+  };
+
+  const catchErrors = (error: any) => {
+    const messageError = catchStatusCodeErrors(error);
+
+    toast.error(messageError);
+  };
+
+  const catchStatusCodeErrors = (error: any): string => {
+    if (error.response && error.response.status === 422) {
+      return Object.values(error.response.data.errors).flat().join("<br>");
+    }
+
+    if (error.code === "ERR_NETWORK") {
+      return "Ocorreu uma inconsistência oa estabelecer a conexão com o servidor.";
+    }
+
+    return error.message;
   };
 
   return {
@@ -48,6 +68,7 @@ export default function useAuthController() {
     login,
     register,
     tabAuth,
+    valid,
   };
 }
 
