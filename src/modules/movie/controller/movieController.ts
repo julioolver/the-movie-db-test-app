@@ -3,6 +3,7 @@ import Movie from "../domain/entity/Movie";
 import { ref, reactive, onMounted } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { catchErrors } from "@/handler/errors";
 
 export default function movieController() {
   const movie = reactive(
@@ -31,29 +32,37 @@ export default function movieController() {
   const selectedMovie = ref<Movie | null>(null);
 
   const fetchMovies = async (newPage: number) => {
-    currentPage.value = newPage;
+    try {
+      currentPage.value = newPage;
 
-    const responseMovies = await http.get("/movies", {
-      params: {
-        page: newPage,
-        query: search.value.trim(),
-      },
-    });
+      const responseMovies = await http.get("/movies", {
+        params: {
+          page: newPage,
+          query: search.value.trim(),
+        },
+      });
 
-    const { page } = responseMovies.data;
+      const { page } = responseMovies.data;
 
-    movies.splice(0, movies.length);
-    movies.push(...responseMovies.data.movies);
+      movies.splice(0, movies.length);
+      movies.push(...responseMovies.data.movies);
 
-    totalPages.value = page.total;
+      totalPages.value = page.total;
+    } catch (error) {
+      catchErrors(error);
+    }
   };
 
   const getMovieByUser = async () => {
-    const response = await http.get(`user/movies/`);
+    try {
+      const response = await http.get(`user/movies/`);
 
-    userMovies.splice(0, userMovies.length);
+      userMovies.splice(0, userMovies.length);
 
-    userMovies.push(...response.data.movies);
+      userMovies.push(...response.data.movies);
+    } catch (error) {
+      catchErrors(error);
+    }
   };
 
   const changeAction = async (
@@ -84,12 +93,11 @@ export default function movieController() {
 
       toast.success("Filme adicionado com sucesso!");
     } catch (error) {
-      toast.error(error.message);
+      catchErrors(error);
     }
   };
 
   const openDialog = (movie: any) => {
-    console.log("Filme selecionado:", movie); // Verificar se o filme está correto
     selectedMovie.value = { ...movie };
     isOpen.value = true;
   };

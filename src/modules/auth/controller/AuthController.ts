@@ -28,7 +28,7 @@ export default function useAuthController() {
 
         return router.push({ name: "Home" });
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response) {
         catchErrors(error.response.data);
       } else {
@@ -43,7 +43,6 @@ export default function useAuthController() {
     }
 
     try {
-      console.log(user);
       const { data }: registredUser = await http.post("/auth/register", user);
 
       storages.setToken(data.access_token);

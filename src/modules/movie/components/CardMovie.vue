@@ -17,7 +17,7 @@
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon @click.stop="controller.changeAction(card, 'watch_later')">
+          <v-btn v-bind="props" icon @click.stop="controller.changeAction(card, 'watched')">
             <v-icon color="blue">{{ card.watch_later ? 'mdi-eye' : 'mdi-eye-outline' }}</v-icon>
           </v-btn>
         </template>
