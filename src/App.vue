@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar v-if="!isLoginPage">
+    <v-app-bar v-if="!isLoginPage" color="#1D2630">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title>Movie List</v-app-bar-title>
@@ -29,12 +29,18 @@
         </v-tooltip>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary
-      v-if="!isLoginPage">
+    <v-navigation-drawer
+      v-model="drawer"
+      :location="$vuetify.display.mobile ? 'bottom' : undefined"
+      temporary
+      v-if="!isLoginPage"
+      style="background-color: #131920"
+    >
       <v-list>
         <v-list-item-group>
-
-          <v-list-item @click="goToExternalLink('https://github.com/julioolver')">
+          <v-list-item
+            @click="goToExternalLink('https://github.com/julioolver')"
+          >
             <v-list-item-icon>
               <v-icon>mdi-github</v-icon>
             </v-list-item-icon>
@@ -42,7 +48,13 @@
               <v-list-item-title>GitHub</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="goToExternalLink('https://www.linkedin.com/in/julio-cesar-oliveira-957593169')">
+          <v-list-item
+            @click="
+              goToExternalLink(
+                'https://www.linkedin.com/in/julio-cesar-oliveira-957593169'
+              )
+            "
+          >
             <v-list-item-icon>
               <v-icon>mdi-linkedin</v-icon>
             </v-list-item-icon>
@@ -53,9 +65,14 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-main>
-      <v-card class="pa-4 ma-4" elevation="2" height="calc(100vh - 130px)" v-if="!isLoginPage"
-        style="scrollbar-width: none; overflow-y: scroll">
+    <v-main style="background-color: #131920">
+      <v-card
+        class="pa-4 ma-4"
+        elevation="2"
+        height="calc(100vh - 130px)"
+        v-if="!isLoginPage"
+        style="scrollbar-width: none; overflow-y: scroll; background-color: #1D2630;"
+      >
         <router-view />
       </v-card>
       <router-view v-else />
@@ -75,7 +92,7 @@ const theme = useTheme();
 const isDarkTheme = computed(() => theme.global.current.value.dark);
 
 const toggleTheme = () => {
-  theme.global.name.value = isDarkTheme.value ? 'light' : 'dark';
+  theme.global.name.value = isDarkTheme.value ? "light" : "dark";
 };
 
 const isLoginPage = computed(() => {
@@ -83,6 +100,6 @@ const isLoginPage = computed(() => {
 });
 
 const goToExternalLink = (url: string) => {
-  window.open(url, '_blank');
+  window.open(url, "_blank");
 };
 </script>
