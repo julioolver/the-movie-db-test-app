@@ -7,13 +7,13 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-btn icon @click="toggleTheme">
+      <v-btn icon @click="toggleTheme" v-show="false">
         <v-tooltip text="Dark Mode">
           <template v-slot:activator="{ props }">
             <v-icon v-bind="props">mdi-theme-light-dark</v-icon>
           </template>
         </v-tooltip>
-      </v-btn> -->
+      </v-btn>
       <v-btn icon @click="router.push({ name: 'Movies' })">
         <v-tooltip text="Buscar Filmes">
           <template v-slot:activator="{ props }">
