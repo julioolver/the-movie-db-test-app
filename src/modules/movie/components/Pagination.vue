@@ -3,24 +3,27 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from 'vue'
+import { defineProps, defineEmits, ref, watch } from "vue";
 
-const props = defineProps < {
+const props = defineProps<{
   currentPage: number;
   totalPages: number;
-} > ()
+}>();
 
-const emit = defineEmits < {
-  (e: 'page-changed', newPage: number): void;
-}> ()
+const emit = defineEmits<{
+  (e: "page-changed", newPage: number): void;
+}>();
 
-const currentPage = ref(props.currentPage)
+const currentPage = ref(props.currentPage);
 
-watch(() => props.currentPage, (newPage) => {
-  currentPage.value = newPage
-})
+watch(
+  () => props.currentPage,
+  (newPage) => {
+    currentPage.value = newPage;
+  }
+);
 
 watch(currentPage, (newPage) => {
-  emit('page-changed', newPage)
-})
+  emit("page-changed", newPage);
+});
 </script>

@@ -1,13 +1,7 @@
 <template>
-  <v-app>
-    <v-main>
-      <v-container class="fill-height d-flex align-center justify-center">
-        <v-col cols="12" sm="8" md="6" lg="4">
-          <router-view />
-        </v-col>
-      </v-container>
-    </v-main>
-  </v-app>
+  <div class="ma-0 pa-0">
+    <router-view />
+</div>
 </template>
 
 <script>

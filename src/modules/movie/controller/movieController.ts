@@ -35,6 +35,12 @@ export default function movieController() {
     try {
       currentPage.value = newPage;
 
+      if (search.value.trim() === '') {
+        toast.error("Informe um termo para busca")
+        
+        return;
+      }
+      
       const responseMovies = await http.get("/movies", {
         params: {
           page: newPage,
