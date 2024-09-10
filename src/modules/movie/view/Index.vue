@@ -12,6 +12,9 @@
         >
         </v-text-field>
       </v-col>
+      <v-btn color="blue-darken-4" @click="controller.fetchMovies(1)"
+        >pesquisar</v-btn
+      >
     </v-row>
     <v-container
       fluid
