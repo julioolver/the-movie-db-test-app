@@ -71,10 +71,11 @@ cd the-movie-db-test-app
 ```
 
 ```bash
-npm install
-```
+docker compose up --build 
 
-```bash
+OU 
+
+npm install
 npm run dev
 ```
 
